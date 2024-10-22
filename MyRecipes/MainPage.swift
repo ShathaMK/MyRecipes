@@ -58,13 +58,13 @@ struct MainPage_Previews: PreviewProvider{
         MainPage()
         /* To make sure your colors are adaptable in both mods
         Group preview was used */
-//        Group{
-//            MainPage()
-//                .preferredColorScheme(.light)
-//            MainPage()
-//                .preferredColorScheme(.dark)
-//            
-//        }
+        Group{
+            MainPage()
+                .preferredColorScheme(.light)
+            MainPage()
+                .preferredColorScheme(.dark)
+            
+        }
     }
     
 }

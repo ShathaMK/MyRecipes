@@ -9,9 +9,26 @@ import SwiftUI
 
 @main
 struct MyRecipesApp: App {
+    init() {
+        //custom nav bar color
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named:"NavBarColor")/// Set your desired color
+
+        // setting nav title colors
+        //appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+       //appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        // Apply the appearance
+        // standard appearance
+        UINavigationBar.appearance().standardAppearance = appearance
+        // scroll appearnce
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance // For compact navigation bar
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainPage()
         }
     }
 }

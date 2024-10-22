@@ -1,15 +1,137 @@
-//
-//  AddNewRecipePage.swift
-//  MyRecipes
-//
-//  Created by Shatha Almukhaild on 16/04/1446 AH.
-//
-
 import SwiftUI
+import PhotosUI
 
 struct AddNewRecipePage: View {
+    @ObservedObject var viewModel = RecipeViewModel()
+    // optional because there is no selection by default
+    @State private var pickerItem: PhotosPickerItem?
+    @State private var selectedImage: Image?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            ScrollView {
+          
+           //
+              
+          
+                ZStack {
+                  
+                    Rectangle()
+                        .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                        .foregroundColor(Color("ColorOrange"))
+                        .frame(width: 481, height: 181)
+                        .padding(.bottom, 320)
+                    Image(systemName: "pho")
+                        .frame(width: 481, height: 181)
+                              //  .clipped()
+                                .background(Color.gray.opacity(0.2))
+                        .background(Color("FillBackground"))
+                        .padding(.bottom, 320)
+       
+                    VStack {
+                            // If i didnt add matching the user can select any asset including videos and we dont want that
+                        PhotosPicker(selection: $pickerItem, matching: .images){
+                            Image("UploadPhoto")
+                                .resizable()
+                                .frame(width: 85, height: 71)
+                        }
+                        
+                 
+                        
+    
+                        Text("Upload Photo")
+                            .font(.title2)
+                            .bold()
+                            .foregroundStyle(.primary)
+                            .padding(.bottom, 320)
+                   
+
+                    }// End of VStack
+                    
+                    // to load the image from the library into the swiftui
+                    .onChange(of: pickerItem){
+                        Task{
+                            selectedImage = try await pickerItem?.loadTransferable(type: Image.self)
+                        }
+                    }
+                
+                    VStack(alignment: .leading) {
+                  
+                        Text("Title")
+                            .font(.title2)
+                            .bold()
+                            .foregroundStyle(.primary)
+                           // .padding(.trailing, 300)
+                            .padding(.top,260)// Adjust this value
+
+                        TextField("Title", text: $viewModel.currentTitle)
+                            .padding()
+                            .frame(width: 350, height: 40)
+                            .background(Color("FillBackground"))
+                            .cornerRadius(7)
+                         
+
+                      
+
+                        Text("Description")
+                            .font(.title2)
+                            .bold()
+                            //.padding(.trailing,230)
+                            .foregroundStyle(.primary)
+                            
+//
+                     
+                        ZStack(alignment: .topLeading) {
+                            // To allow the user to enter multiple line text TextEditor is used
+                            TextEditor(text: $viewModel.currentDescription)
+                            // in order for the background color to change this has to be hidden
+                                .padding(.top, 2) // Adjust based on your design
+                                .padding(.leading, 10)
+                                .scrollContentBackground(.hidden)
+                                .background(Color("FillBackground"))
+         
+                                .frame(width:350,height: 100)
+                                .cornerRadius(7)
+                                .padding(.bottom, 20)
+
+                            if viewModel.currentDescription.isEmpty {
+                                Text("Description")
+                                    .foregroundColor(Color(.lightGray))
+                                    .padding(.top, 10) // Adjust based on your design
+                                    .padding(.leading, 15) // Adjust based on your design
+                                
+                                
+                            }
+                            
+            
+                        }// End of ZStack
+                        
+                        HStack(spacing: 150){
+                        
+                            Text("Add Ingredients").font(.title2).bold()
+                    
+                        
+                            NavigationLink(destination: AddNewRecipePage()) {
+                                Image(systemName: "plus")
+                                    .font(.title).foregroundStyle(Color("ColorOrange")).frame(width: 44,height: 44) // Adjust size as needed
+                            }
+                            
+                        }// End of HStack
+                    }// End of VStack
+                }// End of ZStack
+                .navigationBarTitle("New Recipe")
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: MainPage()) {
+                        Text("Save")
+                            .font(.title3)
+                            .foregroundStyle(Color("ColorOrange"))
+                            .frame(width: 44, height: 44)
+                    }
+                }
+            }
+        } // End of Navigation Stack
     }
 }
 

@@ -6,7 +6,7 @@ struct AddNewRecipePage: View {
     @ObservedObject var viewModel = RecipeViewModel()
     // optional because there is no selection by default
     @State private var pickerItem: PhotosPickerItem?
-    @State private var selectedImage: UIImage?
+   // @State private var selectedImage: UIImage?
 
  
     var body: some View {
@@ -29,13 +29,13 @@ struct AddNewRecipePage: View {
                         // If i didnt add matching the user can select any asset including videos and we dont want that
                         PhotosPicker(selection: $pickerItem, matching: .images){
                             
-                            if (selectedImage==nil){
+                            if (viewModel.selectedImage==nil){
                                 Image("UploadPhoto")
                                     .resizable()
                                     .frame(width: 85, height: 71)
                             }
                             else{
-                                Image(uiImage: selectedImage ?? UIImage())
+                                Image(uiImage: viewModel.selectedImage ?? UIImage())
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 481, height: 181)
@@ -49,7 +49,7 @@ struct AddNewRecipePage: View {
                             
                         }
                         
-                        if (selectedImage==nil){
+                        if (viewModel.selectedImage==nil){
                             
                             Text("Upload Photo")
                                 .font(.title2)
@@ -71,7 +71,7 @@ struct AddNewRecipePage: View {
                               if let data = try await pickerItem.loadTransferable(type: Data.self) {
                                   // Convert the data to a UIImage
                                   if let image = UIImage(data: data) {
-                                     selectedImage = image
+                                      viewModel.selectedImage = image
                                          }
                                         }
                                } catch {
@@ -122,9 +122,8 @@ struct AddNewRecipePage: View {
                                     if viewModel.currentDescription.isEmpty {
                                         Text("Description")
                                             .foregroundColor(Color(.lightGray))
-                                            .padding(.top, 10) // Adjust based on your design
-                                            .padding(.leading, 15) // Adjust based on your design
-                                        
+                                            .padding(.top, 10)
+                                            .padding(.leading, 15)
                                         
                                     }
                                     
@@ -138,7 +137,7 @@ struct AddNewRecipePage: View {
                                     
                                     NavigationLink(destination: AddNewRecipePage()) {
                                         Image(systemName: "plus")
-                                            .font(.title).foregroundStyle(Color("ColorOrange")).frame(width: 44,height: 44) // Adjust size as needed
+                                            .font(.title).foregroundStyle(Color("ColorOrange")).frame(width: 44,height: 44) 
                                     }
                                     
                                 }// End of HStack

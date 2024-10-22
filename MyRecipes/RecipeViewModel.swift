@@ -10,6 +10,8 @@ class RecipeViewModel: ObservableObject{
     @Published var recipes: [Recipe] = [] // Array to hold multiple recipes
         @Published var currentTitle: String = ""
         @Published var currentDescription: String = ""
+        @Published var selectedImage: UIImage? //to store the selected image
+
 //    init(){
 //        
 //        addRecipe()

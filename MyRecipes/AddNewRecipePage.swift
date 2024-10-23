@@ -117,11 +117,10 @@ struct AddNewRecipePage: View {
                             }
                         } // End of HStack
 
-                        // Show the Pop-Up if the button is clicked
                         
-                    } .navigationBarTitle("New Recipe")// End of VStack
+                    }.navigationBarTitle("New Recipe") // End of VStack
                    
-                } // End of ZStack
+                }
                 
             }
             .toolbar {
@@ -134,10 +133,11 @@ struct AddNewRecipePage: View {
                     }
                 }
             }
+            // Show the Pop-Up if the button is clicked
             if showPopUp {
                 PopUpView(showPopUp: $showPopUp)
             }
-        }
+        }// End of ZStack// End of ZStack
         }
 }
 
@@ -161,7 +161,7 @@ struct PopUpView: View {
         ZStack (alignment:.center){
         
                 if showPopUp {
-                    Color.black.opacity(showPopUp ? 0.3 : 0).edgesIgnoringSafeArea(.all)
+                    Color("DimBackground").edgesIgnoringSafeArea(.all)
                 }
 
             VStack(alignment: .leading ,spacing: 20) {

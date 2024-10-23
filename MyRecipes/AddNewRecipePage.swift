@@ -239,9 +239,11 @@ struct PopUpView: View {
                     }
                 }
                 }
+            
                 .frame(width: 306,height: 382)
                 .padding()
-                .background(Color(.white))
+             //NavBarColor make pop background adaptable to light and dark mode
+                .background(Color("NavBarColor"))
                 .cornerRadius(10)
                 .padding(40)
                 

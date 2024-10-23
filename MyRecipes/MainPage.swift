@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MainPage: View {
     // used to check if there is a recipe and change the view based on that

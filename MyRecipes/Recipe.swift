@@ -4,7 +4,7 @@
 //
 //  Created by Shatha Almukhaild on 17/04/1446 AH.
 //
-
+import SwiftData
 import SwiftUI
 struct Recipe: Identifiable {
     var id = UUID()

@@ -6,9 +6,11 @@ is an app where you can store all your favourite recipes so you can refer to the
 
 Features✨:
 
-You can add your recipe image , title , description and ingredients. 
-You can edit/delete a recipe.
-You can search recipes from recipes list.
+- You can add your recipe image , title , description and ingredients. 
+
+- You can edit/delete a recipe.
+
+- You can search recipes from recipes list.
 
 Main Deliverable :
 - Turn the Sketch design into an app

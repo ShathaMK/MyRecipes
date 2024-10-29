@@ -12,11 +12,12 @@ struct ViewRecipe: View {
     @State var navigateToEdit = false
     var recipeToDelete: Recipe? // This is the recipe you want to delete
     @State private var showingAlert = false
+    var recipe: Recipe // Accept the recipe directly
 
     var body: some View {
         
         ZStack {
-            NavigationStack {
+          //  NavigationStack {
                 
                 ScrollView {
                     
@@ -26,7 +27,7 @@ struct ViewRecipe: View {
                      
                         ZStack{
                       
-                            if let image = viewModel.selectedImage {
+                            if let image = recipe.recipeImage {
                                 Image(uiImage: image)
                                     .resizable()
                                     .frame(maxWidth: UIScreen.screenWidth, maxHeight: 181, alignment: .leading)
@@ -46,15 +47,15 @@ struct ViewRecipe: View {
                         }
                         
                     
-                       Text("\(viewModel.currentDescription)").foregroundStyle(.secondary).padding()
-                    }.navigationTitle(viewModel.currentTitle) // end of VStack
+                        Text("\(recipe.Description)").foregroundStyle(.secondary).padding()
+                    }.navigationTitle(recipe.recipeTitle) // end of VStack
                     
                     ZStack(alignment: .center){
                         VStack(spacing:15){
                             Text("Ingredients").font(.title).bold().padding(.trailing,200)
                             // call ingredients from recipe view model
                            
-                        ForEach(viewModel.currentIngredients) { ingredient in
+                            ForEach(recipe.ingredients) { ingredient in
                            
                            // VStack{
                             ZStack{
@@ -158,6 +159,7 @@ struct ViewRecipe: View {
                     
                     ToolbarItem(placement: .bottomBar) {
                           Button(action: {
+                             // Set the recipe to delete
                               showingAlert = true // Show confirmation alert
                           }) {
                               Text("Delete Recipe").font(.title3).foregroundStyle(Color(.red))
@@ -177,7 +179,7 @@ struct ViewRecipe: View {
                                     )
                                 }
                 
-            }// end of NavigationStack
+        //    }// end of NavigationStack
         }// end of ZStack
     }// end of Body
     
@@ -189,6 +191,15 @@ struct ViewRecipe: View {
     }
 }// end of struct
 
+//Update the preview to include the recipe argument
 #Preview {
-    ViewRecipe()
+   // Provide a sample recipe for preview
+   let sampleRecipe = Recipe(
+       recipeTitle: "Sample Recipe",
+       recipeImage: nil, // or provide a sample image
+       Description: "This is a sample description.",
+       ingredients: []
+   )
+   
+   ViewRecipe(viewModel: RecipeViewModel(), recipe: sampleRecipe)
 }

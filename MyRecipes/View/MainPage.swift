@@ -54,16 +54,13 @@ struct MainPage: View {
                                     .foregroundStyle(.white)
                                     .padding(.top,200).padding(.leading,25)
                                 //Spacer()
-                                Button(action:{
-                                    navigateToView = true
-                                }){
-                                    Text("See All").font(.footnote).foregroundStyle(Color("ColorOrange")).bold()
-                                        .padding(.leading,25)
+                                NavigationLink(destination: ViewRecipe(viewModel: viewModel, recipeToDelete: recipe, recipe: recipe)) {
+                                    Text("See All")
+                                        .font(.footnote)
+                                        .foregroundStyle(Color("ColorOrange")).bold()
+                                        .padding(.leading, 25)
                                         .padding(.bottom)
-                                }
-                                .navigationDestination(isPresented: $navigateToView) {
-                                    ViewRecipe(viewModel: viewModel ,recipeToDelete: recipe)
-                                          }//.padding(.top,240)
+                                                        }
                                    // .padding(.leading,130)
                                 
                                 Spacer()

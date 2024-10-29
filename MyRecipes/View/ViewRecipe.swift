@@ -9,15 +9,17 @@ import SwiftUI
 
 struct ViewRecipe: View {
     @ObservedObject var viewModel = RecipeViewModel()
-    @State var navigateToView = false
-    
+    @State var navigateToEdit = false
+    var recipeToDelete: Recipe? // This is the recipe you want to delete
+    @State private var showingAlert = false
+
     var body: some View {
         
         ZStack {
             NavigationStack {
                 
                 ScrollView {
-                
+                    
                     VStack(spacing:20) {
                         Spacer()
                         Spacer()
@@ -43,10 +45,9 @@ struct ViewRecipe: View {
                             
                         }
                         
-                       // Text("semi-hard cheese typically made from the milk of goats, sheep, or cows. It's known for its tangy taste and firm, chewy texture.")
+                    
                        Text("\(viewModel.currentDescription)").foregroundStyle(.secondary).padding()
-                    }//.navigationTitle("recipe title")
-                      .navigationTitle(viewModel.currentTitle)
+                    }.navigationTitle(viewModel.currentTitle) // end of VStack
                     
                     ZStack(alignment: .center){
                         VStack(spacing:15){
@@ -63,7 +64,7 @@ struct ViewRecipe: View {
                                         .frame(width: 358, height: 52)
                                         .foregroundStyle(Color("FillBackground"))
                                         .cornerRadius(7)
-                                }
+                                }// end of HStack
                               
                                
                                     Rectangle()
@@ -98,15 +99,18 @@ struct ViewRecipe: View {
                                            Text("\(ingredient.unit)")
                                           .foregroundStyle(Color(.white))
                                           .padding(.trailing, 60)
-                                           }
+                                           }// end of HStack
     
-                                }
-                         }
-                        }
+                                } // end of ZStack
+                         }// end of ForEach
+                            
+                    
+                        }// end of VStack
     
   
                                            }// end of ZStack
-                }.toolbar {
+                }// end of ScrollView
+                .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         
                         Button(action: {
@@ -135,8 +139,8 @@ struct ViewRecipe: View {
                             print("Saved Recipes: \(newRecipe)")
                             print("Current recipes: \(viewModel.recipes)")
 
-                                         // set the navigation flag to navigate to edit recipe 
-                                         navigateToView = true
+                            // set the navigation flag to navigate to edit recipe
+                                         navigateToEdit = true
                                      }) {
                                          Text("Edit")
                                                 .font(.title3)
@@ -146,17 +150,44 @@ struct ViewRecipe: View {
                                      .padding()
 
                                
-                                     .navigationDestination(isPresented: $navigateToView) {
+                                     .navigationDestination(isPresented: $navigateToEdit) {
                                          AddNewRecipePage(viewModel: viewModel)
                                                }
 
                     }// end of ToolBarItem
+                    
+                    ToolbarItem(placement: .bottomBar) {
+                          Button(action: {
+                              showingAlert = true // Show confirmation alert
+                          }) {
+                              Text("Delete Recipe").font(.title3).foregroundStyle(Color(.red))
+                                  .frame(width: 360,height: 52)
+                          }.buttonStyle(.bordered).foregroundStyle(Color("FillBackground"))
+                      }
                 }// end of toolbar
+                // alert confirmation pop up 
+                .alert(isPresented: $showingAlert) {
+                        Alert(
+                        title: Text("Delete a recipe"),
+                        message: Text("Are you sure you want to delete the recipe?"),
+                        primaryButton: .destructive(Text("Delete")) {
+                                            deleteRecipe()
+                                        },
+                        secondaryButton: .cancel()
+                                    )
+                                }
                 
-            }
-        }
+            }// end of NavigationStack
+        }// end of ZStack
+    }// end of Body
+    
+    
+    private func deleteRecipe() {
+        if let recipe = recipeToDelete {
+                 viewModel.deleteRecipe(recipe)
+             }
     }
-}
+}// end of struct
 
 #Preview {
     ViewRecipe()

@@ -16,7 +16,7 @@ class RecipeViewModel: ObservableObject{
     func addRecipe(){
         let newRecipe = Recipe(recipeTitle: currentTitle, recipeImage: selectedImage, Description: currentDescription, ingredients: currentIngredients)
         recipes.append(newRecipe)
-        resetCurrentRecipe()
+       // resetCurrentRecipe()
         
     }
     // a function to reset user input field after the user saves the recipe
@@ -27,6 +27,17 @@ class RecipeViewModel: ObservableObject{
         currentDescription=""
         currentIngredients = []
         
+    }
+    func deleteRecipe(_ recipe: Recipe) {
+        if let index = recipes.firstIndex(where: { $0.id == recipe.id }) {
+            recipes.remove(at: index)
+        }
+    }
+    func loadRecipe(_ recipe: Recipe) {
+        currentTitle = recipe.recipeTitle
+        currentDescription = recipe.Description
+        selectedImage = recipe.recipeImage
+        currentIngredients = recipe.ingredients
     }
 //    // Add a method to load a recipe for editing
 //    func loadRecipe(_ recipe: Recipe) {

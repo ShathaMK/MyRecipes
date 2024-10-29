@@ -62,7 +62,7 @@ struct MainPage: View {
                                         .padding(.bottom)
                                 }
                                 .navigationDestination(isPresented: $navigateToView) {
-                                    ViewRecipe(viewModel: viewModel)
+                                    ViewRecipe(viewModel: viewModel ,recipeToDelete: recipe)
                                           }//.padding(.top,240)
                                    // .padding(.leading,130)
                                 

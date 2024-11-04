@@ -19,7 +19,9 @@ is an app where you can store all your favourite recipes so you can refer to the
 - The app is adaptable to Dark/Light mode
 
 <h3> Main Deliverable : </h3>
+
 - Turn the Sketch design into an app
+  
 - Clean Code and implement MVVM design pattern 
 
 Sketch Design Link : https://www.sketch.com/s/356aff22-c3de-45c2-b87e-9516cb32d503 

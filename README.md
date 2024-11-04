@@ -16,6 +16,8 @@ is an app where you can store all your favourite recipes so you can refer to the
 
 - You can search recipes from recipes list.
 
+- The app is adaptable to dark/light mode
+
 <h3> Main Deliverable : </h3>
 - Turn the Sketch design into an app
 - Clean Code and implement MVVM design pattern 

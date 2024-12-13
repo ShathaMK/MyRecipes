@@ -1,4 +1,3 @@
-//
 //  MainPage.swift
 //  MyRecipes
 //
@@ -10,7 +9,7 @@ import SwiftData
 //
 struct MainPage: View {
     // used to check if there is a recipe and change the view based on that
-    @ObservedObject var viewModel = RecipeViewModel()
+    @EnvironmentObject var viewModel: RecipeViewModel
     @State var navigateToView = false
     @State private var searchText: String = ""
     var filteredRecipes: [Recipe] {
@@ -38,7 +37,7 @@ struct MainPage: View {
                         Spacer()
                         ZStack{
                            //
-                            TextField("     Search", text: $searchText)
+                            TextField(" Search", text: $searchText)
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .cornerRadius(8)
@@ -90,7 +89,7 @@ struct MainPage: View {
                                             .foregroundStyle(.white)
                                             .padding(.top,200).padding(.leading,25)
                                         //Spacer()
-                                        NavigationLink(destination: ViewRecipe(viewModel: viewModel, recipeToDelete: recipe, recipe: recipe)) {
+                                        NavigationLink(destination: ViewRecipe(viewModel: viewModel, selectedRecipe: recipe, recipe: recipe)) {
                                             Text("See All")
                                                 .font(.footnote)
                                                 .foregroundStyle(Color("ColorOrange")).bold()
@@ -106,13 +105,14 @@ struct MainPage: View {
                                 }
                                 
                                 
-                                //                        
+                                //
                             }
                             
                         }.padding(.horizontal)
                             .padding(.top,25)// Optional: adds padding to the VStack
                             .navigationBarTitle("Food Recipes")//End of VStack
                             .navigationBarBackButtonHidden(true)
+                           
                         //
                     } // Hide the back button when new recipe added
                     else{

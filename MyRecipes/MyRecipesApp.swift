@@ -8,7 +8,10 @@
 import SwiftUI
 
 @main
+
 struct MyRecipesApp: App {
+      var viewModel = RecipeViewModel()
+
     init() {
         //custom nav bar color
         let appearance = UINavigationBarAppearance()
@@ -29,6 +32,8 @@ struct MyRecipesApp: App {
     var body: some Scene {
         WindowGroup {
             MainPage()
+                .environmentObject(viewModel) // Pass the viewModel here
+
         }
     }
 }

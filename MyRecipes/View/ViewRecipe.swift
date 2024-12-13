@@ -10,9 +10,10 @@ import SwiftUI
 struct ViewRecipe: View {
     @ObservedObject var viewModel = RecipeViewModel()
     @State var navigateToEdit = false
-    var recipeToDelete: Recipe? // This is the recipe you want to delete
+    var selectedRecipe: Recipe? // This is the recipe to delete
+
     @State private var showingAlert = false
-    var recipe: Recipe // Accept the recipe directly
+     var recipe: Recipe // Accept the recipe via a Binding to allow direct updates
 
     var body: some View {
         
@@ -69,7 +70,7 @@ struct ViewRecipe: View {
                               
                                
                                     Rectangle()
-                                        .frame(width: 90, height: 29)
+                                        .frame(width: 105, height: 29)
                                         .foregroundStyle(Color("ColorOrange"))
                                         .cornerRadius(7)
                                         .padding(.leading,230)
@@ -127,19 +128,30 @@ struct ViewRecipe: View {
                                   return
                               }
                             
-                            // Save new recipe
+                            // Save edited recipe
                           
-                            let newRecipe = Recipe(
+                            let updatedRecipe = Recipe(
+                                id: selectedRecipe?.id ?? UUID(), // Use existing ID or generate a new one
                                 recipeTitle: viewModel.currentTitle,
                                 recipeImage: viewModel.selectedImage,
                                 Description: viewModel.currentDescription,
                                 ingredients: viewModel.currentIngredients)
-                            viewModel.recipes.append(newRecipe)
+                            
+                               // Check if we're editing an existing recipe (recipeToEdit should not be nil)
+                            if let recipeToEdit = selectedRecipe {
+                                   // Update the existing recipe instead of appending a new one
+                                   viewModel.updateRecipe(oldRecipe: recipeToEdit, with: updatedRecipe)
+                                   print("Updated Recipe: \(updatedRecipe)")
+                               } else {
+                                   // If it's a new recipe, append it to the list
+                                   viewModel.recipes.append(updatedRecipe)
+                                   print("New Recipe Added: \(updatedRecipe)")
+                               }
                          
                             // Debug output to check if recipes are saved or not
-                            print("Saved Recipes: \(newRecipe)")
+                    
                             print("Current recipes: \(viewModel.recipes)")
-
+                            viewModel.loadRecipe(updatedRecipe)
                             // set the navigation flag to navigate to edit recipe
                                          navigateToEdit = true
                                      }) {
@@ -152,7 +164,7 @@ struct ViewRecipe: View {
 
                                
                                      .navigationDestination(isPresented: $navigateToEdit) {
-                                         AddNewRecipePage(viewModel: viewModel)
+                                         AddNewRecipePage(viewModel: viewModel, recipeToEdit: recipe)
                                                }
 
                     }// end of ToolBarItem
@@ -167,7 +179,7 @@ struct ViewRecipe: View {
                           }.buttonStyle(.bordered).foregroundStyle(Color("FillBackground"))
                       }
                 }// end of toolbar
-                // alert confirmation pop up 
+                // alert confirmation pop up
                 .alert(isPresented: $showingAlert) {
                         Alert(
                         title: Text("Delete a recipe"),
@@ -185,7 +197,7 @@ struct ViewRecipe: View {
     
     
     private func deleteRecipe() {
-        if let recipe = recipeToDelete {
+        if let recipe = selectedRecipe {
                  viewModel.deleteRecipe(recipe)
              }
     }
@@ -193,13 +205,14 @@ struct ViewRecipe: View {
 
 //Update the preview to include the recipe argument
 #Preview {
-   // Provide a sample recipe for preview
-   let sampleRecipe = Recipe(
-       recipeTitle: "Sample Recipe",
-       recipeImage: nil, // or provide a sample image
-       Description: "This is a sample description.",
-       ingredients: []
-   )
-   
-   ViewRecipe(viewModel: RecipeViewModel(), recipe: sampleRecipe)
+    // Provide a sample recipe for preview
+    let sampleRecipe = Recipe(
+        recipeTitle: "Sample Recipe",
+        recipeImage: nil, // or provide a sample image
+        Description: "This is a sample description.",
+        ingredients: []
+    )
+    
+    
+    ViewRecipe(viewModel: RecipeViewModel(), recipe: sampleRecipe)
 }

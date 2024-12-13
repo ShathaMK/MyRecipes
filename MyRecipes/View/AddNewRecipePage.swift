@@ -10,8 +10,8 @@ struct AddNewRecipePage: View {
     // State to manage pop up visibility
     @State private var showPopUp = false
     @State private var navigateToMain = false
-
- 
+   // the recipe to edit
+    var recipeToEdit: Recipe?
     var body: some View {
         ZStack {
         NavigationStack {
@@ -79,7 +79,13 @@ struct AddNewRecipePage: View {
                             .frame(width: 350, height: 40)
                             .background(Color("FillBackground"))
                             .cornerRadius(7)
-
+                            .onAppear {
+                                // load the data into the view model when edit is clicked
+                                if let recipe = recipeToEdit {
+                                    viewModel.loadRecipe(recipe)
+                                }
+                            }
+                        
                         Text("Description")
                             .font(.title2)
                             .bold()
@@ -171,8 +177,7 @@ struct AddNewRecipePage: View {
                                                       .foregroundStyle(Color(.white))
                                                       .padding(.trailing, 90)
                                                        }
-                
-                                            }
+                                                             }
                                      }
                                     }
                 
@@ -182,7 +187,10 @@ struct AddNewRecipePage: View {
                                     }
                     
                    
-                }.toolbar {
+                }
+         
+            
+            .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         
                         Button(action: {
@@ -201,15 +209,24 @@ struct AddNewRecipePage: View {
                             // Save new recipe
                           
                             let newRecipe = Recipe(
+                                id: recipeToEdit?.id ?? UUID(), // Reuse the existing recipe ID
                                 recipeTitle: viewModel.currentTitle,
                                 recipeImage: viewModel.selectedImage,
                                 Description: viewModel.currentDescription,
                                 ingredients: viewModel.currentIngredients)
-                            viewModel.recipes.append(newRecipe)
+                            // check if recipe is being edited or new added ?
+                            if let recipeToEdit = recipeToEdit {
+                                // update the recipe if its edited
+                                viewModel.updateRecipe(oldRecipe: recipeToEdit,with: newRecipe)
+                                print("Updated Recipes: \(viewModel.recipes)")
+
+                            } else {
+                                // to add a new recipe
+                                viewModel.addRecipe(newRecipe: newRecipe)
+                            }
                          
                             // Debug output to check if recipes are saved or not
                             print("Saved Recipes: \(newRecipe)")
-                            print("Current recipes: \(viewModel.recipes)")
 
                                          // set the navigation flag to navigate to main page after saving the recipe
                                          navigateToMain = true
@@ -223,15 +240,19 @@ struct AddNewRecipePage: View {
 
                                
                                      .navigationDestination(isPresented: $navigateToMain) {
-                                         MainPage(viewModel: viewModel)
+                                         MainPage()
                                                }
 
                     }
                 }
                 
             }.onAppear {
-                // Reset properties for a new recipe
-                viewModel.resetCurrentRecipe()
+                print("Recipe to Edit: \(String(describing: recipeToEdit))")
+
+                if recipeToEdit == nil {
+                    // Reset properties for a new recipe
+                    viewModel.resetCurrentRecipe()
+                }
             }
             
             // Show the Pop-Up if the button is clicked

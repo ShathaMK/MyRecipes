@@ -13,14 +13,11 @@ struct MainPage: View {
     @State var navigateToView = false
     @State private var searchText: String = ""
     var filteredRecipes: [Recipe] {
-         if searchText.isEmpty {
-             return viewModel.recipes
-         } else {
-             return viewModel.recipes.filter { recipe in
-                 recipe.recipeTitle.localizedCaseInsensitiveContains(searchText)
-             }
-         }
-     }
+            // Return only visually filtered data based on the search text
+            viewModel.recipes.filter { recipe in
+                searchText.isEmpty || recipe.recipeTitle.localizedCaseInsensitiveContains(searchText)
+            }
+        }
 
     var body: some View {
 
@@ -37,7 +34,7 @@ struct MainPage: View {
                         Spacer()
                         ZStack{
                            //
-                            TextField(" Search", text: $searchText)
+                            TextField("     Search", text: $searchText)
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .cornerRadius(8)
@@ -54,6 +51,7 @@ struct MainPage: View {
                                 .foregroundColor(.gray)
                                 .padding(.leading,330 )
                         }
+
                         ForEach(filteredRecipes) { recipe in
                             Spacer()
                             VStack(alignment: .center){
@@ -110,7 +108,8 @@ struct MainPage: View {
                             
                         }.padding(.horizontal)
                             .padding(.top,25)// Optional: adds padding to the VStack
-                            .navigationBarTitle("Food Recipes")//End of VStack
+                            .navigationBarTitle("Food Recipes")
+                            .foregroundStyle(Color("ColorOrange"))//End of VStack
                             .navigationBarBackButtonHidden(true)
                            
                         //
@@ -150,9 +149,8 @@ struct MainPage: View {
                                     }
                                 }
                             }
-            }// end of NavigationStack
-
-            
+        }.accentColor(Color("ColorOrange"))// end of NavigationStack
+        
         
         
     }// End of body
